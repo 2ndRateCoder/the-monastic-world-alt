@@ -8,7 +8,7 @@
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const coarsePointer = window.matchMedia("(hover: none), (pointer: coarse)");
-  const FRAME_COUNT = 30;
+  const FRAME_COUNT = 25;
   const COMPLETE_AT = 1;
   const frameUrls = Array.from(
     { length: FRAME_COUNT },
