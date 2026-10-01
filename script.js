@@ -115,3 +115,68 @@
   preloadFrames();
   requestRender();
 })();
+
+(function initTyper() {
+  var wordEl = document.getElementById("typer-word");
+  if (!wordEl) return;
+  var words = ["Ryan", "a Person", "a Seeker", "a creative", "Me"];
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    wordEl.textContent = words[0];
+    return;
+  }
+  var TYPE_MS = 80, HOLD_MS = 1700, DELETE_MS = 40, GAP_MS = 400;
+  var wi = 0, timer = null;
+
+  function schedule(fn, ms) {
+    clearTimeout(timer);
+    if (document.hidden) {
+      var onVisible = function () {
+        document.removeEventListener("visibilitychange", onVisible);
+        schedule(fn, ms);
+      };
+      document.addEventListener("visibilitychange", onVisible);
+      return;
+    }
+    timer = setTimeout(fn, ms);
+  }
+
+  function typeWord(word, i) {
+    wordEl.textContent = word.slice(0, i);
+    if (i <= word.length) {
+      schedule(function () { typeWord(word, i + 1); }, TYPE_MS);
+    } else {
+      schedule(function () { deleteWord(word, word.length); }, HOLD_MS);
+    }
+  }
+
+  function deleteWord(word, i) {
+    wordEl.textContent = word.slice(0, i);
+    if (i > 0) {
+      schedule(function () { deleteWord(word, i - 1); }, DELETE_MS);
+    } else {
+      wi = (wi + 1) % words.length;
+      schedule(function () { typeWord(words[wi], 1); }, GAP_MS);
+    }
+  }
+
+  function start() {
+    // Retype from the first word so the visitor sees the full effect.
+    wi = 0;
+    wordEl.textContent = "";
+    schedule(function () { typeWord(words[wi], 1); }, GAP_MS);
+  }
+
+  if ("IntersectionObserver" in window) {
+    var seen = false;
+    var io = new IntersectionObserver(function (entries) {
+      if (!seen && entries[0].isIntersecting) {
+        seen = true;
+        io.disconnect();
+        start();
+      }
+    }, { threshold: 0.4 });
+    io.observe(wordEl);
+  } else {
+    start();
+  }
+})();
