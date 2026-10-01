@@ -286,7 +286,6 @@ h2 {
 }
 .section-inverted .section-number { color: var(--cream); }
 .section-inverted h2 { color: var(--cream); }
-.typer { white-space: nowrap; }
 #typer-word { font-style: italic; }
 .typer-caret {
   display: inline-block;

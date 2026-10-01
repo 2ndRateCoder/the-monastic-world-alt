@@ -119,7 +119,7 @@
 (function initTyper() {
   var wordEl = document.getElementById("typer-word");
   if (!wordEl) return;
-  var words = ["Ryan", "a Person", "a Seeker", "a creative", "Me"];
+  var words = ["Hi, I’m Ryan.", "Hi, I’m a Seeker.", "Hi, I’m a Creative.", "Hi, I’m a Contemplative."];
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     wordEl.textContent = words[0];
     return;
