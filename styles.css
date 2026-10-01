@@ -5,6 +5,8 @@
   --ink: #1f6e77;
   --blue: #1f6e77;
   --yellow: #eaa93f;
+  --gold: #eaa93f;
+  --halo: #eaa93f;
   --body-ink: #503741;
   --rule: #e0bcc0;
   --page: 1180px;
@@ -416,4 +418,49 @@ h2 {
   .hero-video { display: none !important; }
   .hero-frame { display: block !important; }
   .typer-caret { display: none !important; }
+}
+
+/* ---- Ink dividers: hand-drawn squiggles that draw themselves on scroll ---- */
+.ink-divider {
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem 1.25rem;
+  pointer-events: none;
+}
+.ink-divider svg {
+  width: min(260px, 64%);
+  height: auto;
+  overflow: visible;
+}
+.ink-divider path {
+  fill: none;
+  stroke: var(--body-ink);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0; /* finished stroke is the default */
+}
+.ink-divider.gold path {
+  stroke: var(--halo);
+  stroke-width: 3;
+}
+
+/* Scroll-driven draw-on: pure CSS, reads native scroll, never hijacks it */
+@supports (animation-timeline: view()) {
+  .ink-divider path {
+    stroke-dashoffset: 100;
+    animation: ink-draw 1s ease-out forwards;
+    animation-timeline: view();
+    animation-range: entry 15% entry 75%;
+  }
+  @keyframes ink-draw {
+    to { stroke-dashoffset: 0; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-divider path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
 }
