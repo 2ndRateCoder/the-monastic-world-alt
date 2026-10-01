@@ -9,7 +9,7 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const coarsePointer = window.matchMedia("(hover: none), (pointer: coarse)");
   const FRAME_COUNT = 30;
-  const COMPLETE_AT = 0.5;
+  const COMPLETE_AT = 1;
   const frameUrls = Array.from(
     { length: FRAME_COUNT },
     (_, i) => `./assets/frames/frame-${String(i + 1).padStart(3, "0")}.jpg`
@@ -38,7 +38,7 @@
   function showPoster() {
     video.style.display = "none";
     frame.style.display = "block";
-    frame.src = "./assets/hero-poster.jpg";
+    frame.src = "./assets/monk-poster.jpg";
   }
 
   function renderFrameSequence(progress) {
@@ -68,10 +68,9 @@
     video.style.display = "block";
     if (!videoReady || !Number.isFinite(duration) || duration <= 0) return;
 
-    // The video ping-pongs (hand-drawn -> geometric -> hand-drawn) so it loops
-    // seamlessly; the morph peak is at the halfway point. Scrub only the
-    // first half so scrolling settles on the geometric version.
-    const targetTime = progress * (duration / 2);
+    // The video morphs one way (praying monk -> many arms -> the eye),
+    // so scrub the full duration and settle on the eye close-up.
+    const targetTime = progress * duration;
     if (Math.abs(video.currentTime - targetTime) > 0.016) {
       try { video.currentTime = targetTime; } catch (_) {}
     }
